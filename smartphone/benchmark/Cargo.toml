@@ -1,0 +1,27 @@
+[package]
+name = "pribad_crypto"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "pribad_crypto"
+
+[dependencies]
+anyhow = "1.0.65"
+array-init = "2.0.1"
+bincode = "1.3.3"
+blstrs = "0.6.1"
+group = "0.12.0"
+pairing = "0.22.0"
+rand = "0.8.5"
+rand_chacha = "0.3.1"
+serde = "1.0.145"
+serde-big-array = "0.4.1"
+sha2 = { version = "0.10.2", default-features = false }
+
+[dev-dependencies]
+criterion = "0.4"
+
+[[bench]]
+name = "benchmark"
+harness = false

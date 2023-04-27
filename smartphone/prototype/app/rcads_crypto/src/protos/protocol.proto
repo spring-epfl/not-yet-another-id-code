@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+message PublicKeyProto {
+  bytes g = 1;
+  repeated bytes g_powers = 2;
+  bytes g_tilde = 3;
+  bytes x_tilde = 4;
+  repeated bytes g_tilde_powers = 5;
+}
+
+message PrivateKeyProto {
+  bytes x = 1;
+  bytes g_power_x = 2;
+  repeated bytes y_i = 3;
+}
+
+message KeyPairProto {
+  bytes pk = 1;
+  bytes sk = 2;
+}
+
+message CommitmentAndProofKnowledgeWithBlindingFactorProto {
+  bytes C = 1;
+  bytes challenge = 2;
+  repeated bytes responses = 3;
+  bytes R = 4;
+  bytes t = 5;
+}
+
+message CommitmentAndProofKnowledgeWithoutBlindingFactorProto {
+  bytes C = 1;
+  bytes challenge = 2;
+  repeated bytes responses = 3;
+  bytes R = 4;
+}
+
+message AttributesProto {
+  repeated bytes attributes = 1;
+}
+
+message SignatureProto {
+  bytes sigma_one = 1;
+  bytes sigma_two = 2;
+  repeated bytes attributes = 3;
+}
+
+message CredentialProto {
+  bytes sigma_one = 1;
+  bytes sigma_two = 2;
+  repeated bytes attributes = 3;
+}
+
+message DisclosureProofRecipientProto {
+  bytes C = 1;
+  bytes challenge = 2;
+  bytes R_commitment = 3;
+  bytes R_pseudonym = 4;
+  bytes R_revocation_value = 5;
+  repeated bytes responses = 6;
+  bytes randomized_signature = 7;
+  bytes s_hss = 8;
+  bytes s_rev_value = 9;
+  bytes token = 10;
+  bytes pseudonym = 11;
+  bytes base_revocation_value = 12;
+}
+
+message DisclosureProofVerifierProto {
+  bytes C = 1;
+  bytes challenge = 2;
+  bytes R_commitment = 3;
+  bytes R_pseudonym = 4;
+  bytes R_revocation_value = 5;
+  repeated bytes responses = 6;
+  bytes randomized_signature = 7;
+  bytes s_hss = 8;
+  bytes s_rev_value = 9;
+  bytes base_revocation_value = 10;
+  bytes pseudonym = 11;
+  int32 nb_issuer_attributes = 12;
+  int32 nb_recipient_attributes = 13;
+  bytes powered_rev_value = 14;
+  bytes epoch = 15;
+}
+
+message TokenProto {
+  bytes h = 1;
+  bytes capital_h = 2;
+}
+
+message AlreadySeenCredentialsProto {
+  repeated bytes credentials = 1;
+  int32 number_credentials = 2;
+}
+
+message RevocatedTokensProto {
+  repeated bytes tokens = 1;
+}
+
+message TokenAndRevocationValueProto {
+  bytes token = 1;
+  bytes revocation_value = 2; 
+}
+
+message PowersForBlacklistProto {
+  repeated bytes powers = 1;
+}
+
+message BlacResponsesProto {
+  bytes u1 = 1;
+  bytes u2 = 2;
+}
+
+message BlacBatchProtocolProverOutputProto {
+  bytes responses = 1;
+  repeated bytes auxiliary_commitments = 2;
+  bytes R = 3;
+  bytes token = 4;
+  bytes challenge = 5;
+}
+
+message DisclosureProofResultProto {
+  repeated bytes already_seen_pseudonyms = 1;
+  bool is_valid_proof = 2;
+}
