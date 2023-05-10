@@ -167,10 +167,42 @@ And the measurements are manually retrieved from GlobalPlatformPro output.
 
 ## Smartphone Implementation
 
-The implementation was written for Android 11 (NDK 22.1.7171670) and was tested on a phone Samsung Galaxy A40 with Android 11 (kernel 4.4.177-24085844).
+The implementation is written for Android 11 (NDK 22.1.7171670) and was tested on a phone Samsung Galaxy A40 with Android 11 (kernel 4.4.177-24085844).
+
+It is written in Rust and use the [blst](https://github.com/supranational/blst) library via the bindings [blstrs](https://docs.rs/blstrs/latest/blstrs/) to compute points arithmetics and pairing on curve BLS12-381.
+
+### Building and Running the App
+
+#### Prerequisites
+
+You will need an Android phone with USB debugging enabled.
+
+To build the app and run the benchmarks, you will need a Rust development environment, then install compilation toolchains for the targeted Android phone, and the Dinghy cargo extension to simplify the cross-compilation workflow.
+
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+cargo install cargo-dinghy
+```
+
+To be able to compile the code for Android, you will also need an NDK, we used the version 22.1.7171670. The easiest way is to install it via Android Studio but it can also be downloaded manually from [its download page](https://github.com/android/ndk/wiki/Unsupported-Downloads).
+
+Once the NDK installed, you will need to set an environment variable to indicate to Dinghy where the NDK is installed.
+
+```
+export ANDROID_NDK_HOME="/path/to/extracted/NDK/archive"
+```
+
+To communicate with the phone, you will also need to have `adb` installed. As for teh NDK, the easiest way is to install it from Android Studio, but it can also be installed manually ([link](https://developer.android.com/studio/releases/platform-tools)).
 
 
+#### Building the App and Running the Benchmarks
 
+Once the prerequisite software installed and the environment variable `ANDROID_NDK_HOME` is set to the path of extracted NDK archive, the benchmark can be run with cargo, and the library `criterion` that we used to write the benchmarks will take care to report the statistics it computed from its measurements.
+
+```
+cargo dinghy -d android bench
+```
 
 ## Contributors
 
