@@ -1,6 +1,6 @@
 # Implementation and Evaluation of the Smart-card Prototype
 
-We first describe how to implement a prototype of the smart-card-based solution in the paper, then provide instructions on how to reproduce the measurements on this implementation. 
+We first describe how to implement a prototype of the smart-card-based solution in the paper, then provide instructions on how to reproduce the measurements on this implementation. We also explain some implementation details that can be helpful to understand the code. 
 
 ## A. Implementation of the Smart-card Prototype
 
