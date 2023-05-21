@@ -1,11 +1,13 @@
 # Implementation and Evaluation of the Smart-card Prototype
 
-We first describe how to implement a prototype of the smart-card-based solution in the paper, then provide instructions on how to reproduce the measurements on this implementation. We also explain some implementation details that can be helpful to understand the code. 
+This directory contains the implementation of the smart-card prototype described in the paper. We describe how to compile the smart-card applet, and how to reproduce the measurements on this implementation.
+
+The implementation relies partially on code from JCMathLib for some of the cryptographic operations. At the end of this README we explain an optimization to facilitate computing Pedersen commitments faster.
 
 ## A. Implementation of the Smart-card Prototype
 
-To implement the prototype, we need to choose a card and a card reader that contains the necessary library. 
-We then build an Applet in the card to run the protocol as described in our paper. 
+To implement the prototype, we need to choose a card and a card reader that supports the necessary operations. 
+We then build an Applet for the card to run the protocol as described in our paper. 
 Using the built Applet, we can run measurements to benchmark the computational cost of the prototype. 
 
 ### A.1 Prerequisites
@@ -17,9 +19,7 @@ We implemented a prototype of the smart-card-based solution using the following 
 - a card NXP JCOP3 J3H145
 - a card reader uTrust 4701 F
 
-
 Theoretically, using any card model implementing JavaCard 3.0.4 API, supporting extended APDU and T=1 communication protocol *should* work.  However, there is no promise because some card models may not support the set of Javacard functionality required in this implementation.
-
 
 #### Software
 
@@ -43,7 +43,7 @@ To get 2, you can run the git clone command with the option `--recurse-submodule
 git clone --recurse-submodules https://github.com/spring-epfl/not-yet-another-id-code.git
 ```
 
-If you do not run the git clone command with the option `--recurse-submodules`, use the following command to retrieve the SDKs: 
+If you did not run the git clone command with the option `--recurse-submodules`, use the following command to retrieve the SDKs:
 
 ```
 git submodule update --init
@@ -65,16 +65,16 @@ python3 -m venv venv
 pip install smartcard/python/requirements.txt
 ```
 
-Do not forget to change your working directory to the `smartcard` directory at the root of this git repository: 
+Do not forget to change your working directory to the `smartcard` directory at the root of this git repository:
 ```
 cd smartcard
 ```
 
 
 
-### A.2 Building the Applet 
+### A.2 Building the Applet
 
-Once finishing the preparations in A.1, can build the applet. Before running the building command, make sure the card reader is connected to the machine, and the card is inserted in the reader. Then we can run: 
+Once we've installed all the dependencies from the previous section, we can build the applet. Before running the build command, make sure the card reader is connected to the machine, and the card is inserted in the reader. Then we can run:
 
 ```
 ./gradlew buildJavaCard
@@ -82,14 +82,14 @@ Once finishing the preparations in A.1, can build the applet. Before running the
 
 ### A.3 Installing the Applet
 
-After building the applet as A.2 shows, we need to install the applet on the card before sending any commands to the applet. 
+After building the applet as A.2 shows, we need to install the applet on the card before sending any commands to the applet.
 
 If there is already a previous installation of the applet on the card, we first uninstall it with:
 ```
 $GP --uninstall ./applet/build/javacard/protocol.cap
 ```
 
-To install the last build on the card, use: 
+To install the last build on the card, use:
 ```
 $GP --install ./applet/build/javacard/protocol.cap
 ```
@@ -159,6 +159,8 @@ $$ C = H^m G^r $$
 where $H$ and $G$ are points on the elliptic curve, we tweak $H$ by defining it such as:
 
 $$ H = G^v $$
+
+(Knowing the discrete logarithm of `H` with respect to `G` is normally not secure, but in this case, we are trusting the card to act as a TEE anyway.)
 
 Which simplifies the computation of the commitment as:
 

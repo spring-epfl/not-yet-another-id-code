@@ -1,6 +1,6 @@
 # Implementation and Evaluation of the Smartphone Prototype
 
-In this directory, we explain how to implement a smartphone prototype and evaluate the end-to-end implementation of the protocol on the prototype. 
+This directory contains the implementation of the smart-phone prototype described in the paper. We describe build the smartphone prototype and evaluate the end-to-end implementation of the protocol on the prototype.
 
 To implement the prototype, we need to choose a phone to build an app for the protocol, then we can run measurements using this app. Notice that the code we developed in this repository is in Rust using the [blst](https://github.com/supranational/blst) library via the bindings [blstrs](https://docs.rs/blstrs/latest/blstrs/) to compute points arithmetics and pairing on curve BLS12-381.
 

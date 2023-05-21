@@ -1,7 +1,6 @@
 # Not Yet Another Digital ID: Privacy-preserving Humanitarian Aid Distribution
 
-This repository includes the code in the evaluation section of the paper *"Not Yet Another Digital ID: Privacy-preserving Humanitarian Aid Distribution"* in IEEE S&P 2023. 
-
+This repository includes the prototype implementations used to evalute the designs in the paper *"Not Yet Another Digital ID: Privacy-preserving Humanitarian Aid Distribution"* by Boya Wang, Wouter Lueks, Justinas Sukaitis, Vincent Graf Narbel, and Carmela Troncoso, presented at IEEE S&P 2023. The conference version will be available soon, in the mean time, you can find the [full arXiv version here](https://arxiv.org/abs/2303.17343).
 
 > **Abstract** 
 > Humanitarian aid-distribution programs help bring physical goods to people in need. 
@@ -17,11 +16,11 @@ This repository includes the code in the evaluation section of the paper *"Not Y
 
 ## Purpose of This Repository
 
-This repository aims to provide clear instructions on: 
+This repository serves two purposes:
 
-1. How to implement prototypes of the two solutions we proposed in the paper, i.e., the smart-card-based solution and the smartphone-based solution, 
+1. Capture the prototype implementations for the two solutions we proposed in the paper, i.e., the smart-card-based solution and the smartphone-based solution, and
 
-2. How to reproduce the measurements on the prototypes as written in the evaluation section of the paper
+2. Document how to reproduce the measurements on the prototypes as written in the evaluation section of the paper
 
 ## Structure of This Repository
 
@@ -48,7 +47,7 @@ This repository aims to provide clear instructions on:
 
 ## Contributors
 
-The smart-card prototype was implemented by Laurent Girod and Lorenzo Rovati. 
-The smartphone prototype was implemented by Laurent Girod and Nathan Duchenese. 
+The smart-card prototype was implemented by Laurent Girod and Lorenzo Rovati.
+The smartphone prototype was implemented by Laurent Girod and Nathan Duchenese.
 
 
