@@ -267,14 +267,12 @@ Therefore, the verification command we run in the terminal is:
 (venv) $ python prototype.py verify-commitment 0406094f1717b0c6eb9843884c982b9b9eadd39b050318cda56b00e5db5c1171e052c0f0ed03e3931fc78ae0e0bd3d54e6dd0ac54b3cac50380dd5efb85f854992 e57dfdd27a543ac5120582c37636b20a3825e7378e873a5920a4a3f9508e170a a54a42b51e310ae953e006df7fd1a625bff8a7532b3da350852e42e5bc5c10a5 511CE498CDD24E2D1384D65FC774564F3D834F9992508F36E7A25E1B494728F423CB1EB049917132C10ABD95E4A69F575384298EE041C7553F63C90854282512
 valid commitment
 ```
-**TO CONTINUE HERE**
 
 Last, to verify the signature, run:
 ```
 python prototype.py verify-signature <pk> <tag> <period> <blocklist_hash> <R+COMMITMENT> <SIGNATURE>
 ```
-
-Where both `<R+COMMITMENT>` and `<SIGNATURE>` is are returned by GlobalPlatformPro when running the APDU to compute the signature in the *sending proof* phase of the protocol, and the other arguments should already be provided.
+where both `<R+COMMITMENT>` and `<SIGNATURE>` are returned by GlobalPlatformPro when running the APDU to compute the signature in the *sending proof* phase of the protocol, and the other arguments should already be provided.
 
 In our case, GlobalPlatformPro reported that the `R+COMMITMENT` and `SIGNATURE` were:
 ```
@@ -284,7 +282,7 @@ A>> T=1 (4+0000) 80240000
 A<< (0070+2) (378ms) 304402206F1AD65D9C54A0A0CF440C589AC3F0C99370456F62782FD498AD5218638DF51A0220751C5F9D571131BEAE391C2123A3F072290C1CE95C461D4D68CEB76C12F05565 9000
 ```
 
-Therefore, the command we had to use to verify that the signature was correct was:
+Therefore, the command we had to use to verify that the signature correct is:
 
 ```
 (venv) $ python prototype.py verify-signature 0451c1e2cb9976467bbb138642f26e57ccb4c771fdc725a91a85878ca511dbde9b84da505f8eae290821859e699b0a35f65238ea16b68d674110b82694297f501f 6c98d0a80123d3e3ed66b61b5fe6438b9ae4b31dd116c6b967172967ea4f1fe2 000000006492ee9c 9151dcc690778e1f860eff4a321d1442b9af3c30f2705511173424cbeeb27347 29E3D06D43AB718686779E2537C3387123B6044C14CC863E39670B73B299322B580CF3C4D80C484D8A65B966583A4B7261BB344F0E24B26E1A7C59E4FBA821A9 304402206F1AD65D9C54A0A0CF440C589AC3F0C99370456F62782FD498AD5218638DF51A0220751C5F9D571131BEAE391C2123A3F072290C1CE95C461D4D68CEB76C12F05565
