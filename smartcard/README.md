@@ -113,9 +113,11 @@ CAP loaded
 To ensure that the applet is indeed computing correctly the tags, commitment and other cryptographic objects described in the protocol, we can: 
 1. run the script `prototype.py` which will generate some data to send to the card,
 2. do the same computations using the libraries PyCryptodome, cryptography, and petlib
-3. compare both the output from GlobalPlatformPro and the expected result from the script `prototype.py`
+3. (manually) compare both the output from GlobalPlatformPro and the expected result from the script `prototype.py`
 
 If the outputs are identical, it means the cryptographic objects are computed correctly on the card. 
+
+**Generating commands for the card together with expected results**
 
 To get the output from the script `prototype.py`, we first activate the python virtual environment that should be at the root of this git repository, go into the correct working directory, and ensure we are in the `python` directory to run these scripts:
 ```
@@ -123,7 +125,7 @@ $ . venv/bin/activate
 (venv) $ cd smartcard/python
 ```
 
-We can then generate some command inputs and the expect output from the card by running the `prototype.py` script:
+Then we run `prototype.py` to generate some command inputs (with the corresponding expected output) to later feed into the card:
 
 ```
 (venv) $ python prototype.py
@@ -153,9 +155,20 @@ Verification (use result of previous command)
 python prototype.py verify-signature 0451c1e2cb9976467bbb138642f26e57ccb4c771fdc725a91a85878ca511dbde9b84da505f8eae290821859e699b0a35f65238ea16b68d674110b82694297f501f 6c98d0a80123d3e3ed66b61b5fe6438b9ae4b31dd116c6b967172967ea4f1fe2 000000006492ee9c 9151dcc690778e1f860eff4a321d1442b9af3c30f2705511173424cbeeb27347 R+COMMITMENT SIGNATURE
 ```
 
-You will have to run these commands manually, and eventually replacing the `R+COMMITMENT` and `SIGNATURE` variables by the values from the card output (see below for more details).
+From the above output, we see the commands (always starting with `${GP}`) to pass to the card for the following operations: 
+- Initialization phase at distribution station
+- Set entitlement
+- Hash blocklist
+- Set period
+- Compute showing off proof
+- Sending proof
+- Verification
 
-The outputs of GlobalPlatformPro are quite verbose, here is an example of output produced by the first command:
+**Running commands on the card to get output**
+
+We will run these commands one by one manually, and replacing the `R+COMMITMENT` and `SIGNATURE` variables by the values from the card output (see below for more details).
+
+The outputs of GlobalPlatformPro are quite verbose, here is an example of output produced by the first command for initialization phase at distribution station:
 ```
 {GP} -d -a 00A404000B03F1FF55DE16074A09012600 -a 8011000020e743c8959d66c36d2c86ecf03f019995b7adb606072df8555e7eb1866033ef4d -a 8012000020d101a45137bddb35872a7e9cdea2af424a7aefc774b45139d625e2b91d799a18 -a 80130000410406094f1717b0c6eb9843884c982b9b9eadd39b050318cda56b00e5db5c1171e052c0f0ed03e3931fc78ae0e0bd3d54e6dd0ac54b3cac50380dd5efb85f854992 -a 8014000020e57dfdd27a543ac5120582c37636b20a3825e7378e873a5920a4a3f9508e170a -a 80150000200272e0323283e246dc8fa94830cc708a44b91a898c59ea260c47002ef12f7d97
 GlobalPlatformPro v20.01.23-0-g5ad373b
@@ -189,8 +202,11 @@ A<< (0018+2) (14ms) 6F108408A000000151000000A5049F6501FF 9000
 SCardEndTransaction("Identiv Identiv uTrust 4701 F Dual Interface Reader [uTrust 4701 F Contact Reader] (55041930208215) 00 00")
 SCardDisconnect("Identiv Identiv uTrust 4701 F Dual Interface Reader [uTrust 4701 F Contact Reader] (55041930208215) 00 00", true) tx:240/rx:32
 ```
+Notice that the code `9000` means the command is executed successfully and the last line of output labeled by `9000` is from the card rest APDU (which will always be the last output no matter which command we run). Hence, the interesting output (i.e., the result of computation) will be the second last one for the commands that computed something. 
 
-In the case you expect an output from the card, for example to compute the hash of the blocklist, you can find it as the second last output from the card (the last one being the result from the card reset APDU):
+Next, we present three examples: hash blocklist, commitment, and signature, in order to explain how to check the output of the card with the expected output. 
+
+For checking the hash of the blocklist, run:
 ```
 ${GP} -d -a 00A404000B03F1FF55DE16074A09012600 -a 8021010080b1c820396969fb4a2cb3b2aba73d937367d33fd5c354cbaed396d2ea61ed25562d64208fdec0df014443b4a0cf335d802a3399188864f89d44784367e5a0f0d922532508df883f4fee8823dcda471934fe0dca4347e726c738c35f3cbb12eabd27241d843f6ee61c96983f7fb16f7f05e6a02fffdc7791782bce617626c9ddca -a 80210200807def6c4937250aa6a0373df373fbc2cadf381f19022f7cdaf42a159941769743ffa9a9578c19ea25e568cfcd7517d2eff9b6f7d5fe8a05f4bbfb47c386f8d4d8fd8382b0d5a9288a3628e850fb094e6388be2843efbfe90ce8ab89030cb99ba722364a8d7a55b4657c6e7fb847e32661ebf7ba2581ac95edc79e857f128cc9a1 -a 8021030080eb82ae3d9922001c00750136d8f656a04b36d6f7e1309a77a51d4d92b47528da00e1279d7d073865a8a4b6968e3f12085ae4136f6a0e818e6a3eeb99a4a61cdb735c241627ecf1c1f9cdbd18ed514caa99941591ac893c8009111440a046930da3c0e8853473a3f16a018f6f9092bed66efb5574dfdda222cb8bcc50365c18a3
 GlobalPlatformPro v20.01.23-0-g5ad373b
@@ -234,26 +250,26 @@ Expected result
 9151dcc690778e1f860eff4a321d1442b9af3c30f2705511173424cbeeb27347
 ```
 
-The left checks are on the computation of the commitment and the signature. 
-Using the output from the *showing off proof* command, we verify the commitment by running:
+For checking the computation of the commitment, use the output from the *showing off proof* command, we verify the commitment by running:
 ```
 (venv) $ python prototype.py verify-commitment <g> <z> <m> <R+COMMITMENT>
 ```
 
-Where `<R+COMMITMENT>` is the data returned by GlobalPlatformPro when running the APDU to compute the *show off proof* phase of the protocol, and the other arguments should already be provided. In our case, the output from GlobalPlatformPro was:
+where `<R+COMMITMENT>` is the data returned by GlobalPlatformPro when running the APDU to compute the *show off proof* phase of the protocol, and the other arguments should already be provided. In our case, the output from GlobalPlatformPro was:
 
 ```
 A>> T=1 (4+0000) 80230000
 A<< (0064+2) (541ms) 511CE498CDD24E2D1384D65FC774564F3D834F9992508F36E7A25E1B494728F423CB1EB049917132C10ABD95E4A69F575384298EE041C7553F63C90854282512 9000
 ```
 
-Therefore, the verification command we had to use was:
+Therefore, the verification command we run in the terminal is:
 ```
 (venv) $ python prototype.py verify-commitment 0406094f1717b0c6eb9843884c982b9b9eadd39b050318cda56b00e5db5c1171e052c0f0ed03e3931fc78ae0e0bd3d54e6dd0ac54b3cac50380dd5efb85f854992 e57dfdd27a543ac5120582c37636b20a3825e7378e873a5920a4a3f9508e170a a54a42b51e310ae953e006df7fd1a625bff8a7532b3da350852e42e5bc5c10a5 511CE498CDD24E2D1384D65FC774564F3D834F9992508F36E7A25E1B494728F423CB1EB049917132C10ABD95E4A69F575384298EE041C7553F63C90854282512
 valid commitment
 ```
+**TO CONTINUE HERE**
 
-To verify the signature, run:
+Last, to verify the signature, run:
 ```
 python prototype.py verify-signature <pk> <tag> <period> <blocklist_hash> <R+COMMITMENT> <SIGNATURE>
 ```
