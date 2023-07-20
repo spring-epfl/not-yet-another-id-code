@@ -6,15 +6,15 @@ The implementation relies partially on code from JCMathLib for some of the crypt
 
 ## A. Implementation of the Smart-card Prototype
 
-To implement the prototype, we need to choose a card and a card reader that supports the necessary operations. 
-We then build an Applet for the card to run the protocol as described in our paper. 
-Using the built Applet, we can run measurements to benchmark the computational cost of the prototype. 
+To implement the prototype, we need to choose a card and a card reader that supports the necessary operations.
+We then build an Applet for the card to run the protocol as described in our paper.
+Using the built Applet, we can run measurements to benchmark the computational cost of the prototype.
 
 ### A.1 Prerequisites
 
 #### Hardware
 
-We implemented a prototype of the smart-card-based solution using the following materials: 
+We implemented a prototype of the smart-card-based solution using the following materials:
 
 - a card NXP JCOP3 J3H145
 - a card reader uTrust 4701 F
@@ -23,21 +23,21 @@ Theoretically, using any card model implementing JavaCard 3.0.4 API, supporting 
 
 #### Software
 
-To build and run the protocol applet on the card, we use: 
+To build and run the protocol applet on the card, we use:
 1. `OpenJDK 11`, a Java Development Environment to compile the Java 11 code
 2. `Oracle JavaCard SDK`, for calling the JavaCard libraries
-3. `Ant`, for building the applet of our protocol 
+3. `Ant`, for building the applet of our protocol
 4. *GlobalPlatformPro*, for installing the applet on the physical card and send commands (i.e., APDUs)
 5. `Python3` version 3.9 or later, for running the scripts to generate the data to send to the card by calling `GlobalPlatformPro`.
 6. `pip`, a compilation suite, as well as OpenSSL and its development files to build Python dependencies, and the necessary tools to build a python virtual environment (like the module venv from the standard library).
 
-For a Debian 11 system, 1, 3, 5, and 6 of the above dependencies can be installed using package repositories of the distribution using the command: 
+For a Debian 11 system, 1, 3, 5, and 6 of the above dependencies can be installed using package repositories of the distribution using the command:
 
 ```
 # apt-get install ant openjdk-11-jdk python3 gcc g++ make cmake libssl-dev python3-dev python3-pip python3-venv
 ```
 
-To get 2, you can run the git clone command with the option `--recurse-submodules`: 
+To get 2, you can run the git clone command with the option `--recurse-submodules`:
 
 ```
 $ git clone --recurse-submodules https://github.com/spring-epfl/not-yet-another-id-code.git
@@ -108,14 +108,14 @@ $ $GP --install ./applet/build/javacard/protocol.cap
 CAP loaded
 ```
 
-#### A.4 Testing the Applet
+### A.4 Testing the Applet
 
-To ensure that the applet is indeed computing correctly the tags, commitment and other cryptographic objects described in the protocol, we can: 
+To ensure that the applet is indeed computing correctly the tags, commitment and other cryptographic objects described in the protocol, we can:
 1. run the script `prototype.py` which will generate some data to send to the card,
 2. do the same computations using the libraries PyCryptodome, cryptography, and petlib
 3. (manually) compare both the output from GlobalPlatformPro and the expected result from the script `prototype.py`
 
-If the outputs are identical, it means the cryptographic objects are computed correctly on the card. 
+If the outputs are identical, it means the cryptographic objects are computed correctly on the card.
 
 **Generating commands for the card together with expected results**
 
@@ -155,7 +155,7 @@ Verification (use result of previous command)
 python prototype.py verify-signature 0451c1e2cb9976467bbb138642f26e57ccb4c771fdc725a91a85878ca511dbde9b84da505f8eae290821859e699b0a35f65238ea16b68d674110b82694297f501f 6c98d0a80123d3e3ed66b61b5fe6438b9ae4b31dd116c6b967172967ea4f1fe2 000000006492ee9c 9151dcc690778e1f860eff4a321d1442b9af3c30f2705511173424cbeeb27347 R+COMMITMENT SIGNATURE
 ```
 
-From the above output, we see the commands (always starting with `${GP}`) to pass to the card for the following operations: 
+From the above output, we see the commands (always starting with `${GP}`) to pass to the card for the following operations:
 - Initialization phase at distribution station
 - Set entitlement
 - Hash blocklist
@@ -192,7 +192,7 @@ A>> T=1 (4+0032) 80140000 20 E57DFDD27A543AC5120582C37636B20A3825E7378E873A5920A
 A<< (0000+2) (26ms) 9000
 A>> T=1 (4+0032) 80150000 20 0272E0323283E246DC8FA94830CC708A44B91A898C59EA260C47002EF12F7D97
 A<< (0000+2) (18ms) 9000
-A>> T=1 (4+0000) 00A40400 00 
+A>> T=1 (4+0000) 00A40400 00
 A<< (0018+2) (14ms) 6F108408A000000151000000A5049F6501FF 9000
 [TRACE] GPSession -  [6F]
 [TRACE] GPSession -      [84] A000000151000000
@@ -202,9 +202,9 @@ A<< (0018+2) (14ms) 6F108408A000000151000000A5049F6501FF 9000
 SCardEndTransaction("Identiv Identiv uTrust 4701 F Dual Interface Reader [uTrust 4701 F Contact Reader] (55041930208215) 00 00")
 SCardDisconnect("Identiv Identiv uTrust 4701 F Dual Interface Reader [uTrust 4701 F Contact Reader] (55041930208215) 00 00", true) tx:240/rx:32
 ```
-Notice that the code `9000` means the command is executed successfully and the last line of output labeled by `9000` is from the card rest APDU (which will always be the last output no matter which command we run). Hence, the interesting output (i.e., the result of computation) will be the second last one for the commands that computed something. 
+Notice that the code `9000` means the command is executed successfully and the last line of output labeled by `9000` is from the card rest APDU (which will always be the last output no matter which command we run). Hence, the interesting output (i.e., the result of computation) will be the second last one for the commands that computed something.
 
-Next, we present three examples: hash blocklist, commitment, and signature, in order to explain how to check the output of the card with the expected output. 
+Next, we present three examples: hash blocklist, commitment, and signature, in order to explain how to check the output of the card with the expected output.
 
 For checking the hash of the blocklist, run:
 ```
@@ -226,7 +226,7 @@ A>> T=1 (4+0128) 80210200 80 7DEF6C4937250AA6A0373DF373FBC2CADF381F19022F7CDAF42
 A<< (0000+2) (24ms) 9000
 A>> T=1 (4+0128) 80210300 80 EB82AE3D9922001C00750136D8F656A04B36D6F7E1309A77A51D4D92B47528DA00E1279D7D073865A8A4B6968E3F12085AE4136F6A0E818E6A3EEB99A4A61CDB735C241627ECF1C1F9CDBD18ED514CAA99941591AC893C8009111440A046930DA3C0E8853473A3F16A018F6F9092BED66EFB5574DFDDA222CB8BCC50365C18A3
 A<< (0032+2) (31ms) 9151DCC690778E1F860EFF4A321D1442B9AF3C30F2705511173424CBEEB27347 9000
-A>> T=1 (4+0000) 00A40400 00 
+A>> T=1 (4+0000) 00A40400 00
 A<< (0018+2) (13ms) 6F108408A000000151000000A5049F6501FF 9000
 [TRACE] GPSession -  [6F]
 [TRACE] GPSession -      [84] A000000151000000
@@ -294,19 +294,16 @@ Verification successful!
 
 Using the implemented prototype, we could benchmark the following operations to evaluate the performance:
 
-- the transfer speed, using the script `benchmark_blocklist.py`, 
-- the time it takes to compute the tag given the period and household secret, using the script `benchmark_tags.py`, 
+- the transfer speed, using the script `benchmark_blocklist.py`,
+- the time it takes to compute the tag given the period and household secret, using the script `benchmark_tags.py`,
 - the time it takes to hash blocklists of different sizes, using the script `benchmark_transfer.py`.
 
 The results can be retrieved from the GlobalPlatformPro output.
 
 
+## C. Implementation Details
 
-
-
-#### C. Implementation Details
-
-We explain one interesting tweak we used to implement cryptographic functions using limited support of the JavaCard API on the chosen card model. 
+We explain one interesting tweak we used to implement cryptographic functions using limited support of the JavaCard API on the chosen card model.
 
 While the JavaCard API offers a reasonable range of cryptographic functions, it does not offer support nor for large integer operations nor for basic point operations on elliptic curves. In particular, it does not offer a way to do point multiplication with the cryptographic co-processor, hence, it is not possible to compute a commitment in an efficient manner. To work around this problem, instead of computing a traditional commitment:
 
@@ -325,5 +322,5 @@ $$ C = G^{mv} G ^r = G^{mv + r} $$
 Then we used JCMathlib to compute the remaining large integers operations. Also because the multiplication is much more costly in term of computation than addition, we pre-compute the computation of $mv$ when we are setting the household entitlement $m$. This allow to improve the performance of commitment computation, by offloading the multiplication cost.
 
 
-### D. Acknowledgement 
+## D. Acknowledgement
 This implementation uses code from [JCMathlib](https://github.com/OpenCryptoProject/JCMathLib), as well as a template written by Dusan Klinec, Martin Paljak, and Petr Svenda which can be found at this [link](https://github.com/ph4r05/javacard-gradle-template).
