@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use blstrs::{Scalar, G1Projective};
 use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
 use group::Group;
@@ -8,6 +10,10 @@ use rand_chacha::rand_core::SeedableRng;
 use pribad_crypto::pedersen::PedersenParams;
 use pribad_crypto::pointcheval_sanders::PrivateKey;
 use pribad_crypto::smartphone::{RegistrationStation, HouseholdPhoneBuilder, DistributionStation};
+
+
+const MEASUREMENT_TIME_S: u64 = 5;
+
 
 pub fn bench_pedersen(c: &mut Criterion) {
     let mut rng = ChaCha20Rng::seed_from_u64(42 as u64);
@@ -132,7 +138,9 @@ pub fn bench_smartphone(c: &mut Criterion) {
 
 criterion_group!{
     name = benches;
-    config = Criterion::default().sample_size(1000);
+    config = Criterion::default()
+        .measurement_time(Duration::from_secs(MEASUREMENT_TIME_S))
+        .sample_size(1000);
     targets = bench_pedersen, bench_pointcheval_sanders, bench_smartphone
 }
 
